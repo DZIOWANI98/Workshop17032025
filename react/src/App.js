@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useNavigate, useParams } from 'react-router-dom';
 import CardSelection from './components/CardSelection';
 import './App.css';
 
@@ -14,8 +14,9 @@ function Home() {
     event.preventDefault();
     // Save the username to session storage
     sessionStorage.setItem('username', username);
-    // Redirect to CardSelection
-    navigate('/card-selection');
+    // Generate a session ID and redirect to CardSelection
+    const sessionId = Math.random().toString(36).substr(2, 9);
+    navigate(`/card-selection/${sessionId}`);
   };
 
   return (
@@ -46,7 +47,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/card-selection" element={<CardSelection username={username} />} />
+        <Route path="/card-selection/:sessionId" element={<CardSelection username={username} />} />
       </Routes>
     </Router>
   );

@@ -49,3 +49,9 @@ button {
   font-size: 1.2em;
   font-weight: bold;
 }
+
+.card.selected {
+  border-color: #007bff;
+  background-color: #007bff;
+  color: white;
+}
