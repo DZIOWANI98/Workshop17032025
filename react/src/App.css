@@ -1,0 +1,28 @@
+.App {
+  text-align: center;
+}
+
+.card-deck {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.card {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 20px;
+  margin: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.1);
+}
+
+.selected-card {
+  margin-top: 20px;
+  font-size: 1.5em;
+  font-weight: bold;
+}
