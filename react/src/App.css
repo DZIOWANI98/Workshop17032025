@@ -55,3 +55,10 @@ button {
   background-color: #007bff;
   color: white;
 }
+
+.session-data {
+  margin-top: 20px;
+  text-align: left;
+  font-size: 1em;
+  white-space: pre-wrap;
+}

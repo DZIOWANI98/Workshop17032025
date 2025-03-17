@@ -4,23 +4,39 @@ import CardDeck from './CardDeck';
 
 const CardSelection = ({ username }) => {
   const { sessionId } = useParams();
-  const [selectedCard, setSelectedCard] = useState(() => {
-    // Retrieve the selected card from session storage if it exists
-    return sessionStorage.getItem(`selectedCard_${sessionId}`) || null;
-  });
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [sessionData, setSessionData] = useState({});
+
+  useEffect(() => {
+    const ws = new WebSocket('ws://localhost:8080');
+
+    ws.onopen = () => {
+      console.log('Connected to WebSocket server');
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.sessionId === sessionId) {
+        setSessionData(data.sessionData);
+      }
+    };
+
+    ws.onclose = () => {
+      console.log('Disconnected from WebSocket server');
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, [sessionId]);
 
   const handleCardClick = (value) => {
     setSelectedCard(value);
-    // Save the selected card to session storage
-    sessionStorage.setItem(`selectedCard_${sessionId}`, value);
-  };
-
-  useEffect(() => {
-    // Optionally, you can clear the session storage when the component unmounts
-    return () => {
-      sessionStorage.removeItem(`selectedCard_${sessionId}`);
+    const ws = new WebSocket('ws://localhost:8080');
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ sessionId, username, selectedCard: value }));
     };
-  }, [sessionId]);
+  };
 
   return (
     <div>
@@ -28,6 +44,10 @@ const CardSelection = ({ username }) => {
       <div className="username">Welcome, {username}!</div>
       <CardDeck onCardClick={handleCardClick} selectedCard={selectedCard} />
       {selectedCard && <div className="selected-card">Selected Card: {selectedCard}</div>}
+      <div className="session-data">
+        <h2>Session Data:</h2>
+        <pre>{JSON.stringify(sessionData, null, 2)}</pre>
+      </div>
     </div>
   );
 };
