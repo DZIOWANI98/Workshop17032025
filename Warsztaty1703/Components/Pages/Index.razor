@@ -1,0 +1,25 @@
+@page "/"
+@using Microsoft.AspNetCore.Components
+
+<h3>Welcome to Scrum Poker</h3>
+
+<div>
+  <label for="userName">Enter your name:</label>
+  <input id="userName" @bind="userName" />
+  <button @onclick="SubmitName">Submit</button>
+</div>
+
+@if (!string.IsNullOrEmpty(submittedName))
+{
+  <p>Hello, @submittedName! Welcome to Scrum Poker.</p>
+}
+
+@code {
+  private string userName;
+  private string submittedName;
+
+  private void SubmitName()
+  {
+    submittedName = userName;
+  }
+}

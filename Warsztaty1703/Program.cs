@@ -1,8 +1,10 @@
+using Warsztaty1703.Components;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents();
 builder.Services.AddSignalR();
 
 var app = builder.Build();
@@ -19,7 +21,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAntiforgery();
+
+app.MapStaticAssets();
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
 app.MapBlazorHub();
-app.MapHub<ScrumPokerHub>("/scrumpokerhub");
 
 app.Run();
